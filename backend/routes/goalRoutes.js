@@ -1,20 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const {
+  getGoals,
+  setGoal,
+  updateGoal,
+  deleteGoal,
+} = require("../controllers/goalController");
+const { set } = require("mongoose");
 
-router.get("/", (req, res) => {
-  res.status(200).json({ message: "Get Goals" });
-});
+// router.get("/", getGoals);
+// router.post("/", setGoal);
+// router.put("/:id", updateGoal);
+// router.delete("/:id", deleteGoal);
 
-router.post("/", (req, res) => {
-  res.status(200).json({ message: "Set Goal" });
-});
-
-router.put("/:id", (req, res) => {
-  res.status(200).json({ message: `Update Goals ${req.params.id}` });
-});
-
-router.delete("/:id", (req, res) => {
-  res.status(200).json({ message: `Delete Goals ${req.params.id}` });
-});
+router.route("/").get(getGoals).post(setGoal);
+router.route("/:id").delete(deleteGoal).put(updateGoal);
 
 module.exports = router;
