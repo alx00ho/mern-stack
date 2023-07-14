@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
-    "dev": "nodemon -w . -w .env backend/server.js"
+    "dev": "nodemon -w . -w .env backend/server.js",
+    "client": "npm start --prefix frontend"
   },
   "author": "Alexander Ho",
   "license": "MIT",
