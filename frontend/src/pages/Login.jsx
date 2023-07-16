@@ -1,13 +1,37 @@
 import { useState, useEffect } from "react";
 import { FaSignInAlt } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { login, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
 
-function Register() {
+function Login() {
   const [formdata, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const { email, password } = formdata;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -18,7 +42,18 @@ function Register() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -30,7 +65,7 @@ function Register() {
       </section>
 
       <section className="form">
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="form-group">
             <input
               type="email"
@@ -54,7 +89,7 @@ function Register() {
             />
           </div>
           <div className="form-group">
-            <button className="btn btn-block" type="submit" onSubmit={onSubmit}>
+            <button className="btn btn-block" type="submit">
               Submit
             </button>
           </div>
@@ -64,4 +99,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
