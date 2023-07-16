@@ -23,6 +23,17 @@ function Register() {
     (state) => state.auth
   );
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -46,18 +57,6 @@ function Register() {
     }
   };
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-
-    if (isSuccess || user) {
-      navigate("/");
-    }
-
-    dispatch(reset());
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
-
   if (isLoading) {
     return <Spinner />;
   }
@@ -66,13 +65,13 @@ function Register() {
     <>
       <section className="heading">
         <h1>
-          <FaUser />
+          <FaUser /> Register
         </h1>
         <p>Please create an account</p>
       </section>
 
       <section className="form">
-        <form>
+        <form onSubmit={onSubmit}>
           <div className="form-group">
             <input
               type="text"
@@ -118,7 +117,7 @@ function Register() {
             />
           </div>
           <div className="form-group">
-            <button className="btn btn-block" type="submit" onSubmit={onSubmit}>
+            <button className="btn btn-block" type="submit">
               Submit
             </button>
           </div>
